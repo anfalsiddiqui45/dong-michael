@@ -163,6 +163,18 @@ p { margin: 0 0 1rem; }
 .button-primary { background: var(--blue); color: var(--white); }
 .button-primary:hover { background: var(--navy); border-color: var(--navy); color: var(--white); }
 
+.button-admin {
+    background: var(--navy);
+    border-color: var(--navy);
+    color: var(--white);
+}
+
+.button-admin:hover {
+    background: var(--blue);
+    border-color: var(--blue);
+    color: var(--white);
+}
+
 
 /* ---------- General sections ---------- */
 .section { padding: 4rem 0; }
@@ -231,6 +243,26 @@ p { margin: 0 0 1rem; }
 .text-link:hover { text-decoration: underline; }
 
 .full-list-note { margin-top: 1.8rem; }
+
+.custom-sections {
+    margin-top: 1rem;
+    padding-bottom: 2.5rem;
+}
+
+.custom-section {
+    padding: 1.25rem 0;
+    border-top: 1px solid var(--border);
+}
+
+.custom-section h3 {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+}
+
+.custom-section p {
+    color: var(--muted);
+    margin-bottom: 0.6rem;
+}
 
 
 /* ---------- Projects, education, awards, news (date + text rows) ---------- */

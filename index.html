@@ -43,6 +43,7 @@
                         <a href="#research" class="button button-primary">View Research</a>
                         <a href="#publications" class="button">Publications</a>
                         <a href="#contact" class="button">Contact</a>
+                        <a href="login.html" class="button button-admin">Edit Profile</a>
                     </div>
                 </div>
                 <div class="hero-photo">
@@ -56,6 +57,10 @@
             <div class="container">
                 <h2>About</h2>
                 <div class="about-text" id="about-text"></div>
+                <div id="experience-block" class="subblock" hidden>
+                    <h3>Academic Experience</h3>
+                    <div class="entry-list" id="experience-list"></div>
+                </div>
                 <div id="memberships-block" class="subblock">
                     <h3>Professional Memberships</h3>
                     <ul class="plain-list" id="memberships-list"></ul>
@@ -117,6 +122,8 @@
             </div>
         </section>
 
+        <div id="custom-sections" class="container custom-sections"></div>
+
     </main>
 
     <footer class="site-footer">
@@ -126,6 +133,8 @@
     </footer>
 
     <!-- data.js must be loaded BEFORE script.js -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase.js"></script>
     <script src="data.js"></script>
     <script src="script.js"></script>
 </body>

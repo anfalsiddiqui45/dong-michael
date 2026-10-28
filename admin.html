@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard – Professor Academic Profile</title>
+  <link rel="stylesheet" href="admin.css" />
+</head>
+<body>
+  <div class="admin-shell">
+    <header class="admin-header">
+      <div>
+        <p class="eyebrow">Academic Content Management</p>
+        <h1>Admin Dashboard</h1>
+      </div>
+      <div class="header-actions">
+        <a href="index.html" class="secondary-button" target="_blank" rel="noopener">Public Website ↗</a>
+        <button id="save-all-button" type="button" class="primary-button">Save All Changes</button>
+        <button id="logout-button" type="button" class="danger-button">Logout</button>
+      </div>
+    </header>
+
+    <div id="loading-indicator" class="loading-indicator">
+      <div class="spinner"></div>
+      <span>Loading content from Supabase...</span>
+    </div>
+
+    <div id="status-message" class="status-message" aria-live="polite"></div>
+
+    <section class="dashboard-panel panel">
+      <div>
+        <p class="eyebrow">Content Overview</p>
+        <h2>Website Sections</h2>
+      </div>
+      <div class="dashboard-grid">
+        <div class="stat-box"><span>Profile</span><strong id="stat-profile">0</strong></div>
+        <div class="stat-box"><span>Research</span><strong id="stat-research">0</strong></div>
+        <div class="stat-box"><span>Publications</span><strong id="stat-publications">0</strong></div>
+        <div class="stat-box"><span>Projects</span><strong id="stat-projects">0</strong></div>
+        <div class="stat-box"><span>Education</span><strong id="stat-education">0</strong></div>
+        <div class="stat-box"><span>Awards</span><strong id="stat-awards">0</strong></div>
+        <div class="stat-box"><span>Experience</span><strong id="stat-experience">0</strong></div>
+        <div class="stat-box"><span>News</span><strong id="stat-news">0</strong></div>
+        <div class="stat-box"><span>Memberships</span><strong id="stat-memberships">0</strong></div>
+      </div>
+    </section>
+
+    <main class="admin-layout">
+      <!-- 1. Profile & Contact Information -->
+      <section class="panel" data-section="profile">
+        <div class="section-topbar">
+          <h2>Profile &amp; Biography</h2>
+          <button type="button" class="primary-button small-button save-section-btn" data-section="profile">Save Profile &amp; Links</button>
+        </div>
+        <div class="field-grid">
+          <label>Full Name<input id="name" type="text" placeholder="e.g. Dr. Yun-Hao Dong" /></label>
+          <label>Position / Title<input id="title" type="text" placeholder="e.g. Senior Lecturer" /></label>
+          <label>Department<input id="department" type="text" placeholder="e.g. Department of Construction and Quality Management" /></label>
+          <label>University<input id="university" type="text" placeholder="e.g. Hong Kong Metropolitan University" /></label>
+          
+          <label class="full-width">Short Tagline / Description
+            <textarea id="shortDescription" placeholder="Short description displayed beneath your name on the home section"></textarea>
+          </label>
+          
+          <label class="full-width">Biography (Paragraphs separated by blank lines)
+            <textarea id="about" style="min-height: 140px;" placeholder="Full academic biography"></textarea>
+          </label>
+
+          <!-- Profile Image Management -->
+          <div class="full-width image-upload-block">
+            <label>Profile Image</label>
+            <div class="image-preview-row">
+              <img id="profileImagePreview" class="profile-thumb" src="images/profile.jpg" alt="Profile preview" onerror="this.src='images/placeholder.svg'" />
+              <div class="image-upload-actions">
+                <input id="profileImageInput" type="file" accept="image/*" />
+                <button id="upload-image-button" type="button" class="secondary-button small-button">Upload New Image</button>
+                <button id="remove-image-button" type="button" class="danger-button small-button">Reset Image</button>
+              </div>
+            </div>
+            <label style="font-weight: normal; font-size: 0.85rem; color: var(--muted); margin-top: 0.4rem;">
+              Current Image URL
+              <input id="profileImage" type="text" placeholder="images/profile.jpg or Supabase Storage URL" />
+            </label>
+          </div>
+
+          <label class="full-width">Full Publications List Link (HKMU / Scholar Page)
+            <input id="publicationsFullListUrl" type="url" placeholder="https://scholars.hkmu.edu.hk/en/persons/..." />
+          </label>
+
+          <!-- Academic & Contact Links -->
+          <div class="section-subtitle">Academic &amp; Contact Links</div>
+
+          <label>Email Address<input id="email" type="email" placeholder="mdong@hkmu.edu.hk" /></label>
+          <label>Office Location<input id="office" type="text" placeholder="Building & Room" /></label>
+          <label>Google Scholar URL<input id="googleScholar" type="url" placeholder="https://scholar.google.com/..." /></label>
+          <label>ORCID URL<input id="orcid" type="url" placeholder="https://orcid.org/0000-..." /></label>
+          <label>LinkedIn URL<input id="linkedin" type="url" placeholder="https://linkedin.com/in/..." /></label>
+          <label>Scopus Author URL<input id="scopus" type="url" placeholder="https://scopus.com/..." /></label>
+          <label>ResearchGate URL<input id="researchGate" type="url" placeholder="https://researchgate.net/profile/..." /></label>
+          <label>University Profile URL<input id="universityProfile" type="url" placeholder="https://scholars.hkmu.edu.hk/..." /></label>
+        </div>
+      </section>
+
+      <!-- 2. Research Interests -->
+      <section class="panel" data-section="researchInterests">
+        <div class="section-topbar">
+          <h2>Research Interests</h2>
+          <button type="button" class="primary-button small-button save-section-btn" data-section="researchInterests">Save Research</button>
+        </div>
+        <p class="small-text">Research themes displayed in the Research section.</p>
+        <div id="research-list" class="list-stack"></div>
+        <div id="add-box-researchInterests" class="add-box" style="display: none;"></div>
+        <button type="button" class="add-button" data-kind="researchInterests">+ Add Research Interest</button>
+      </section>
+
+      <!-- 3. Publications -->
+      <section class="panel" data-section="publications">
+        <div class="section-topbar">
+          <h2>Publications</h2>
+          <button type="button" class="primary-button small-button save-section-btn" data-section="publications">Save Publications</button>
+        </div>
+        <p class="small-text">Journal papers, conference papers, and reviews. Filtered by year on the public website.</p>
+        <div id="publication-list" class="list-stack"></div>
+        <div id="add-box-publications" class="add-box" style="display: none;"></div>
+        <button type="button" class="add-button" data-kind="publications">+ Add Publication</button>
+      </section>
+
+      <!-- 4. Projects -->
+      <section class="panel" data-section="projects">
+        <div class="section-topbar">
+          <h2>Research Projects &amp; Grants</h2>
+          <button type="button" class="primary-button small-button save-section-btn" data-section="projects">Save Projects</button>
+        </div>
+        <p class="small-text">Selected research grants and funded projects.</p>
+        <div id="project-list" class="list-stack"></div>
+        <div id="add-box-projects" class="add-box" style="display: none;"></div>
+        <button type="button" class="add-button" data-kind="projects">+ Add Project</button>
+      </section>
+
+      <!-- 5. Education -->
+      <section class="panel" data-section="education">
+        <div class="section-topbar">
+          <h2>Education</h2>
+          <button type="button" class="primary-button small-button save-section-btn" data-section="education">Save Education</button>
+        </div>
+        <div id="education-list" class="list-stack"></div>
+        <div id="add-box-education" class="add-box" style="display: none;"></div>
+        <button type="button" class="add-button" data-kind="education">+ Add Education</button>
+      </section>
+
+      <!-- 6. Awards & Honours -->
+      <section class="panel" data-section="awards">
+        <div class="section-topbar">
+          <h2>Awards &amp; Honours</h2>
+          <button type="button" class="primary-button small-button save-section-btn" data-section="awards">Save Awards</button>
+        </div>
+        <div id="awards-list" class="list-stack"></div>
+        <div id="add-box-awards" class="add-box" style="display: none;"></div>
+        <button type="button" class="add-button" data-kind="awards">+ Add Award</button>
+      </section>
+
+      <!-- 7. Academic Experience -->
+      <section class="panel" data-section="academicExperience">
+        <div class="section-topbar">
+          <h2>Academic Experience</h2>
+          <button type="button" class="primary-button small-button save-section-btn" data-section="academicExperience">Save Experience</button>
+        </div>
+        <p class="small-text">Past and present academic appointments, fellowships, and postdoctoral roles.</p>
+        <div id="experience-list" class="list-stack"></div>
+        <div id="add-box-academicExperience" class="add-box" style="display: none;"></div>
+        <button type="button" class="add-button" data-kind="academicExperience">+ Add Academic Experience</button>
+      </section>
+
+      <!-- 8. News & Updates -->
+      <section class="panel" data-section="news">
+        <div class="section-topbar">
+          <h2>News &amp; Updates</h2>
+          <button type="button" class="primary-button small-button save-section-btn" data-section="news">Save News</button>
+        </div>
+        <div id="news-list" class="list-stack"></div>
+        <div id="add-box-news" class="add-box" style="display: none;"></div>
+        <button type="button" class="add-button" data-kind="news">+ Add News Item</button>
+      </section>
+
+      <!-- 9. Professional Memberships -->
+      <section class="panel" data-section="memberships">
+        <div class="section-topbar">
+          <h2>Professional Memberships</h2>
+          <button type="button" class="primary-button small-button save-section-btn" data-section="memberships">Save Memberships</button>
+        </div>
+        <p class="small-text">Committees, societies, and international associations.</p>
+        <div id="memberships-list" class="list-stack"></div>
+        <div id="add-box-memberships" class="add-box" style="display: none;"></div>
+        <button type="button" class="add-button" data-kind="memberships">+ Add Membership</button>
+      </section>
+
+      <!-- 10. Custom Sections -->
+      <section class="panel" data-section="customSections">
+        <div class="section-topbar">
+          <h2>Custom Sections</h2>
+          <button type="button" class="primary-button small-button save-section-btn" data-section="customSections">Save Custom Sections</button>
+        </div>
+        <p class="small-text">Add custom sections to expand the profile with teaching, invited talks, or other content.</p>
+        <div id="custom-sections-list" class="list-stack"></div>
+        <div id="add-box-customSections" class="add-box" style="display: none;"></div>
+        <button type="button" class="add-button" data-kind="customSections">+ Add Custom Section</button>
+      </section>
+    </main>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase.js"></script>
+  <script src="data.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>
